@@ -13,7 +13,7 @@
             align-items: flex-start;
             height: 100vh;
             margin: 0;
-            padding-top: 20px; /* ページのトップに空白を作る */
+            padding-top: 20px;
         }
         .container {
             background-color: #fff;
@@ -150,9 +150,9 @@
         function submitForm() {
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
-            const date1 = document.getElementById('date1').value;
-            const date2 = document.getElementById('date2').value;
-            const date3 = document.getElementById('date3').value;
+            const date1 = formatDate(document.getElementById('date1').value);
+            const date2 = formatDate(document.getElementById('date2').value);
+            const date3 = formatDate(document.getElementById('date3').value);
             const message = document.getElementById('message').value;
 
             const formData = {
@@ -164,23 +164,33 @@
                 message
             };
 
-            fetch('https://script.google.com/macros/s/AKfycbyloirUChRi8SjrJJMh7mrHaRv1M8N1HxPdb18njRR5m00J7YUseD-Hwltnn-JsnhwU/exec', { // ここにApps ScriptのデプロイURLを挿入
+            // Google Apps Scriptにデータを送信
+            fetch('https://script.google.com/macros/s/AKfycbwJiJytPDyalgjPjlTQGp08_LaLtFg9s7eb9R5YKlSiH5KHISJ7hynnGK6ruhOsT7Lj/exec', {
                 method: 'POST',
                 body: JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(response => response.json())
+            })
+            .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert('予約が成功しました。');
-                } else {
-                    alert('予約に失敗しました。');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('予約に失敗しました。');
+                alert('予約が完了しました。');
+            })
+            .catch(error => {
+                console.error('エラーが発生しました:', error);
+                alert('予約の送信に失敗しました。');
             });
+        }
+
+        function formatDate(datetime) {
+            if (!datetime) return '';
+            const date = new Date(datetime);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}年${month}月${day}日 ${hours}:${minutes}`;
         }
     </script>
 </body>
