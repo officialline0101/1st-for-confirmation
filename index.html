@@ -13,7 +13,7 @@
             align-items: flex-start;
             height: 100vh;
             margin: 0;
-            padding-top: 20px;
+            padding-top: 20px; /* ページのトップに空白を作る */
         }
         .container {
             background-color: #fff;
@@ -164,29 +164,22 @@
                 message
             };
 
-            if (!name || !phone || !date1 || !visitCount || symptoms.length === 0) {
-                alert('必須項目を全て入力してください。');
-                return;
-            }
-
-            fetch('https://script.google.com/macros/s/AKfycbzlmxYlhYf6daDq4TB0F_EQ-VcK1JqjJzMG9S3k-nrsX7cICSqmvbJQck1KLV-RZ_vL/exec', { // ここにデプロイしたウェブアプリのURLを入力
+            fetch('https://script.google.com/macros/s/AKfycbyzC3MsUo8ez-AFflHdf1qekOcj5T3-hUYsReWwpiAX6h3uKBn8WM4xN3I_xrUi18Ng/exec', {
                 method: 'POST',
+                body: JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('予約が送信されました。当日キャンセルはご遠慮ください。キャンセル料が発生します。');
-                } else {
-                    alert('予約の送信中にエラーが発生しました。');
                 }
-            })
-            .catch(error => {
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('予約が成功しました。');
+                } else {
+                    alert('予約に失敗しました。');
+                }
+            }).catch(error => {
                 console.error('Error:', error);
-                alert('予約の送信中にエラーが発生しました。');
+                alert('予約に失敗しました。');
             });
         }
     </script>
