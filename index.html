@@ -123,7 +123,7 @@
         <label for="message">メッセージ（質問等お気軽にご記入ください）</label>
         <textarea id="message" rows="4" placeholder="メッセージを入力してください"></textarea>
 
-        <button class="submit-button" onclick="google.script.run.withSuccessHandler(onSuccess).submitForm(getFormData())">予約を行う</button>
+        <button class="submit-button" onclick="submitForm()">予約を行う</button>
     </div>
 
     <script>
@@ -147,7 +147,7 @@
             }
         }
 
-        function getFormData() {
+        function submitForm() {
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const date1 = document.getElementById('date1').value;
@@ -155,12 +155,7 @@
             const date3 = document.getElementById('date3').value;
             const message = document.getElementById('message').value;
 
-            if (!name || !phone || !date1 || !visitCount || symptoms.length === 0) {
-                alert('必須項目を全て入力してください。');
-                return null;
-            }
-
-            return {
+            const formData = {
                 name,
                 phone,
                 visitCount,
@@ -168,10 +163,31 @@
                 dates: [date1, date2, date3],
                 message
             };
-        }
 
-        function onSuccess() {
-            alert('予約が送信されました。当日キャンセルはご遠慮ください。キャンセル料が発生します。');
+            if (!name || !phone || !date1 || !visitCount || symptoms.length === 0) {
+                alert('必須項目を全て入力してください。');
+                return;
+            }
+
+            fetch('https://script.google.com/macros/s/AKfycbxU2B7xphJ60xzwSQ-q2SDQzuBSZ_Ew02SiUFkJ36RSY5nRKV9si1hdZvmUUMGyGVw/exec', { // ここにデプロイしたウェブアプリのURLを入力
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('予約が送信されました。当日キャンセルはご遠慮ください。キャンセル料が発生します。');
+                } else {
+                    alert('予約の送信中にエラーが発生しました。');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('予約の送信中にエラーが発生しました。');
+            });
         }
     </script>
 </body>
