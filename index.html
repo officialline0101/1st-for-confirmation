@@ -169,34 +169,25 @@
                 return;
             }
 
-            const calendarId = 'b6d552a065b92516d4af5c10e1e2b70070da63d0e84dbb3111518a92fe067f5b@group.calendar.google.com';
-
-            const eventDetails = `
-                予約者名: ${name}
-                電話番号: ${phone}
-                訪問回数: ${visitCount}
-                症状: ${symptoms.join(', ')}
-                メッセージ: ${message}
-            `;
-
-            const dates = [date1, date2, date3].filter(date => date !== '');
-
-            dates.forEach(date => {
-                const eventUrl = generateGoogleCalendarUrl(calendarId, eventDetails, date);
-                window.open(eventUrl, '_blank');
+            fetch('https://script.google.com/macros/s/AKfycbwlGsFzuKADfwI2FCQx3FdVggin6Cns0b989Ax_ieTXckZ7wCXVQoxMJtXtdlpDmllY/exec', { // ここにデプロイしたウェブアプリのURLを入力
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('予約が送信されました。当日キャンセルはご遠慮ください。キャンセル料が発生します。');
+                } else {
+                    alert('予約の送信中にエラーが発生しました。');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('予約の送信中にエラーが発生しました。');
             });
-
-            alert('予約が送信されました。当日キャンセルはご遠慮ください。キャンセル料が発生します。');
-        }
-
-        function generateGoogleCalendarUrl(calendarId, details, dateTime) {
-            const startDateTime = new Date(dateTime);
-            const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000); // 30分後を終了時間とする
-            const start = startDateTime.toISOString().replace(/-|:|\.\d{3}/g, "");
-            const end = endDateTime.toISOString().replace(/-|:|\.\d{3}/g, "");
-
-            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=予約&details=${encodeURIComponent(details)}&dates=${start}/${end}&sf=true&output=xml&src=${calendarId}`;
-            return url;
         }
     </script>
 </body>
