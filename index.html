@@ -1,429 +1,203 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<base target="_top">
-<meta http-equiv="content-type" charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-  <!-- vue 3 Datapicker css -->
-  <link rel="stylesheet" href="https://unpkg.com/@vuepic/vue-datepicker@latest/dist/main.css">
-
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-<style>
-    .dp__button {
-        display: none;
-    }
-    * {
-    	font-family:"游ゴシック Medium",YuGothic,YuGothicM,"Hiragino Kaku Gothic ProN","Hiragino Kaku Gothic Pro",メイリオ,Meiryo,sans-serif;
-      }
-    body {
-    	margin:0;
-    }
-    header {
-    	padding: 5px;
-    	background-color: #333;
-    	position: relative;
-    }
-    h2 {
-    	text-align:center;
-    	color: #fff;
-    	margin: 10px;
-    }
-    .btn-group>.btn, .btn-group-vertical>.btn {
-        float: none;
-        display: inline-block;
-    }
-    .btn-info {
-        color: #fff;
-        background-color: #333;
-        border-color: #FFF;
-    }
-    .btn-info:focus, .btn-info:active, .btn-info.active, .open>.dropdown-toggle.btn-info, .check {
-        color: #333;
-        background-color: #fff;
-        border: solid 2px #333;
-    }
-    .container {
-    	margin: 40px 0;
-    }
-    .form-group {
-        margin-bottom: 20px;
-    }
-    .use-span {
-    	width: 25%;
-    	font-size: 12px;
-    	padding: 6px;
-    	text-align: center;
-    }
-    .regist {
-    	background:red;
-    	border-color:red;
-    	width: 100%;
-    	padding: 20px 0;
-    	margin: 20px 0;
-    	color: #FFFFFF;
-    }
-    #error{
-        display:none;
-    }
-    #section { display: none; }
-    #family_count { display: none; }
-    .dp__input {
-        display: block;
-        
-        width: 100%;
-        height: 34px;
-        padding: 6px 12px;
-        padding-left: 24px;
-        font-size: 14px;
-        line-height: 1.42857143;
-        color: #555;
-        background-color: #fff;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    }
-    .dp__action_buttons {
-        flex:auto;
-    }
-    input[type=radio] {
-        display: none;
-    }
-</style>
-</head>
-<body>
-<header>
-	<h2>予約フォーム</h2>
-</header>
-<section id="app">
-	<div class="container" id="bring">
-        <!-- <form id="apply"> -->
-
-            <!-- customer_name -->  
-            <div class="form-group">
-                <label>お客様名（カタカナ）</label>
-                <input v-model="name" type="text" name="customer_name" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label>電話番号</label>
-                <input v-model="tel" type="text" name="customer_tel" class="form-control" required>
-            </div>
-
-            <!-- place -->
-            <div class="form-group">
-                <label>ご来店回数</label>
-                <div class="btn-group" style="width:100%;">
-                    <label class="btn btn-info" style="width: 49%;" for="first" :class="number === '初めて' ? 'check' : ''">
-                        <input value="初めて" type="radio" v-model="number" id="first">初めて
-                    </label>
-                    <label class="btn btn-info" style="width: 49%;" for="second" :class="number === '2回目以降' ? 'check' : ''">
-                        <input value="2回目以降" type="radio" v-model="number" id="second">2回目以降
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>症状</label>
-                <div class="btn-group" style="width:100%;">
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === '頭痛・偏頭痛' ? 'check' : ''" for="one">
-                        <input name="place" value="頭痛・偏頭痛" type="radio" required v-model="syoujou" id="one">頭痛・偏頭痛
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === '交通事故施術' ? 'check' : ''" for="two">
-                        <input name="place" value="交通事故施術" type="radio" required v-model="syoujou" id="two">交通事故施術
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === '肩こり・腕のしびれ' ? 'check' : ''" for="three">
-                        <input name="place" value="肩こり・腕のしびれ" type="radio" required v-model="syoujou" id="three">肩こり・腕のしびれ
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === '臀部・下肢の痛みや痺れ' ? 'check' : ''" for="four">
-                        <input name="place" value="臀部・下肢の痛みや痺れ" type="radio" required v-model="syoujou" id="four">臀部・下肢の痛みや痺れ
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === 'ぎっくり腰・慢性腰痛' ? 'check' : ''" for="five">
-                        <input name="place" value="ぎっくり腰・慢性腰痛" type="radio" required v-model="syoujou" id="five">ぎっくり腰・慢性腰痛
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === '寝違い・むち打ち等首の症状' ? 'check' : ''" for="six">
-                        <input name="place" value="寝違い・むち打ち等首の症状" type="radio" required v-model="syoujou" id="six">寝違い・むち打ち等首の症状
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === 'EMS(電気的筋肉刺激装置)トレーニング' ? 'check' : ''" for="six">
-                        <input name="place" value="EMS(電気的筋肉刺激装置)トレーニング" type="radio" required v-model="syoujou" id="six">EMS(電気的筋肉刺激装置)トレーニング
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === '健康保険の施術' ? 'check' : ''" for="six">
-                        <input name="place" value="健康保険の施術" type="radio" required v-model="syoujou" id="six">健康保険の施術
-                    </label>
-                    <label class="btn btn-info" style="width: 100%;" :class="syoujou === 'その他' ? 'check' : ''" for="seven">
-                        <input name="place" value="その他" type="radio" required v-model="syoujou" id="seven">その他
-                    </label>
-                </div>
-            </div>
-
-            <!-- date -->
-            <div class="form-group">
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>カレンダー予約状況</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <style>
-    .flatpickr-day {
-      position: relative;
-    }
-    .availability-badge {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 50%;
-      padding: 2px 4px;
-      font-size: 10px;
-      line-height: 1;
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-  <div>
-    <label for="first-choice-date">第1希望日:</label>
-    <input type="text" id="first-choice-date" placeholder="クリックして日時を入力">
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
-    async function updateAvailability(year, month) {
-      const availability = await fetch(`https://your-github-username.github.io/your-repo-name/getMonthlyAvailability?year=${year}&month=${month}`)
-        .then(response => response.json());
-
-      document.querySelectorAll('.flatpickr-day').forEach(function(dayElem) {
-        const date = dayElem.dateObj;
-        const dateString = date.toISOString().split('T')[0];
-        if (availability[dateString]) {
-          const badge = document.createElement('div');
-          badge.className = 'availability-badge';
-          badge.textContent = availability[dateString];
-          dayElem.appendChild(badge);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約フォーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 20px;
         }
-      });
-    }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="tel"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .visit-buttons, .symptoms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .visit-buttons button, .symptoms button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f7f7f7;
+            cursor: pointer;
+            box-sizing: border-box;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .visit-buttons button.active, .symptoms button.active {
+            background-color: #444;
+            color: #fff;
+        }
+        .date-inputs input[type="datetime-local"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff4c4c;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>予約フォーム</h1>
+        <label for="name">お客様名※必須</label>
+        <input type="text" id="name" placeholder="お名前を入力してください">
 
-    flatpickr("#first-choice-date", {
-      onMonthChange: function(selectedDates, dateStr, instance) {
-        const year = instance.currentYear;
-        const month = instance.currentMonth;
-        updateAvailability(year, month);
-      },
-      onYearChange: function(selectedDates, dateStr, instance) {
-        const year = instance.currentYear;
-        const month = instance.currentMonth;
-        updateAvailability(year, month);
-      },
-      onReady: function(selectedDates, dateStr, instance) {
-        const year = instance.currentYear;
-        const month = instance.currentMonth;
-        updateAvailability(year, month);
-      }
-    });
-  </script>
-</body>
-</html>
+        <label for="phone">電話番号※必須</label>
+        <input type="tel" id="phone" placeholder="電話番号を入力してください">
 
-                <label>第1希望日</label>
-                <div class="form-group">
-                    <Datepicker v-model="datepicker1" placeholder="クリックして日時を入力" locale="jp" select-text="選択する" cancel-text="キャンセル" format="yyyy年MM月dd日" :disabled-week-days="[0]"></Datepicker>
-                </div>
-                <select class="form-control" v-model="datepicker1time">
-                    <option value="08:30">08:30</option>
-                    <option value="09:00">09:00</option>
-                    <option value="09:30">09:30</option>
-                    <option value="10:00">10:00</option>
-                    <option value="10:30">10:30</option>
-                    <option value="11:00">11:00</option>
-                    <option value="11:30">11:30</option>
-                    <option value="12:00">12:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="15:30">15:30</option>
-                    <option value="16:00">16:00</option>
-                    <option value="16:30">16:30</option>
-                    <option value="17:00">17:00</option>
-                    <option value="17:30">17:30</option>
-                    <option value="18:00">18:00</option>
-                    <option value="18:30">18:30</option>
-                    <option value="19:00">19:00</option>
-                    <option value="19:30">19:30</option>
-                </select>
-            </div>
-            <!-- date -->
-            <div class="form-group">
-                <label>第2希望日</label>
-                <div class="form-group">
-                    <Datepicker v-model="datepicker2" placeholder="クリックして日時を入力" locale="jp" select-text="選択する" cancel-text="キャンセル" format="yyyy年MM月dd日" :disabled-week-days="[0]"></Datepicker>
-                </div>
-                <select class="form-control" v-model="datepicker2time">
-                    <option value="08:30">08:30</option>
-                    <option value="09:00">09:00</option>
-                    <option value="09:30">09:30</option>
-                    <option value="10:00">10:00</option>
-                    <option value="10:30">10:30</option>
-                    <option value="11:00">11:00</option>
-                    <option value="11:30">11:30</option>
-                    <option value="12:00">12:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="15:30">15:30</option>
-                    <option value="16:00">16:00</option>
-                    <option value="16:30">16:30</option>
-                    <option value="17:00">17:00</option>
-                    <option value="17:30">17:30</option>
-                    <option value="18:00">18:00</option>
-                    <option value="18:30">18:30</option>
-                    <option value="19:00">19:00</option>
-                    <option value="19:30">19:30</option>
-                </select>
-            </div>
+        <label>ご来店回数※必須</label>
+        <div class="visit-buttons">
+            <button type="button" id="firstVisit" onclick="selectVisit(this)">初めて</button>
+            <button type="button" id="repeatVisit" onclick="selectVisit(this)">2回目以降</button>
+        </div>
 
-            <div class="form-group">
-                <label>第3希望日</label>
-                <div class="form-group">
-                    <Datepicker v-model="datepicker3" placeholder="クリックして日時を入力" locale="jp" select-text="選択する" cancel-text="キャンセル" format="yyyy年MM月dd日" :disabled-week-days="[0]"></Datepicker>
-                </div>
-                <select class="form-control" v-model="datepicker3time">
-                    <option value="08:30">08:30</option>
-                    <option value="09:00">09:00</option>
-                    <option value="09:30">09:30</option>
-                    <option value="10:00">10:00</option>
-                    <option value="10:30">10:30</option>
-                    <option value="11:00">11:00</option>
-                    <option value="11:30">11:30</option>
-                    <option value="12:00">12:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="15:30">15:30</option>
-                    <option value="16:00">16:00</option>
-                    <option value="16:30">16:30</option>
-                    <option value="17:00">17:00</option>
-                    <option value="17:30">17:30</option>
-                    <option value="18:00">18:00</option>
-                    <option value="18:30">18:30</option>
-                    <option value="19:00">19:00</option>
-                    <option value="19:30">19:30</option>
-                </select>
-            </div>
+        <label>症状※必須</label>
+        <div class="symptoms">
+            <button type="button" onclick="selectSymptom(this)">頭痛・偏頭痛</button>
+            <button type="button" onclick="selectSymptom(this)">交通事故施術</button>
+            <button type="button" onclick="selectSymptom(this)">肩こり・腕のしびれ</button>
+            <button type="button" onclick="selectSymptom(this)">臀部・下肢の痛みや痒れ</button>
+            <button type="button" onclick="selectSymptom(this)">ぎっくり腰・慢性腰痛</button>
+            <button type="button" onclick="selectSymptom(this)">寝違い・むち打ち等首の症状</button>
+            <button type="button" onclick="selectSymptom(this)">EMS(電気的筋肉刺激装置)トレーニング</button>
+            <button type="button" onclick="selectSymptom(this)">健康保険の施術</button>
+            <button type="button" onclick="selectSymptom(this)">その他</button>
+        </div>
 
-            <div class="form-group">
-                <label>メッセージ<small>（質問等お気軽にご記入ください）</small></label>
-                <textarea v-model="message" name="customer_message" class="form-control" required rows="6"></textarea>
-            </div>
+        <label for="date1">第1希望日※必須</label>
+        <input type="datetime-local" id="date1" step="1800" placeholder="タップして日時を入力">
 
-            <button type="submit" class="btn regist" v-on:click="done()" :disabled="name == '' || syoujou == '' || number == '' || tel == '' ">予約を行う</button>
-        <!-- </form> -->
-	</div>
-</section>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<!-- vue 3 Datapicker js -->
-<script src="https://unpkg.com/@vuepic/vue-datepicker@latest"></script>
-<script>
-  liff.init(
-    data => {
-      var userId = data.context.userId;
-      console.log(userId);
-    });
-</script>
+        <label for="date2">第2希望日</label>
+        <input type="datetime-local" id="date2" step="1800" placeholder="タップして日時を入力">
 
-<script>
-    const app = {
-        data() {
-            return {
-                datepicker1: '',
-                datepicker2: '',
-                datepicker3: '',
-                datepicker1time: '',
-                datepicker2time: '',
-                datepicker3time: '',
-                name: "",
-                syoujou: "",
-                number: "",
-                tel: "",
-                message: ""
+        <label for="date3">第3希望日</label>
+        <input type="datetime-local" id="date3" step="1800" placeholder="タップして日時を入力">
+
+        <label for="message">メッセージ（質問等お気軽にご記入ください）</label>
+        <textarea id="message" rows="4" placeholder="メッセージを入力してください"></textarea>
+
+        <button class="submit-button" onclick="submitForm()">予約を行う</button>
+    </div>
+
+    <script>
+        let visitCount = '';
+        let symptoms = [];
+
+        function selectVisit(element) {
+            document.getElementById('firstVisit').classList.remove('active');
+            document.getElementById('repeatVisit').classList.remove('active');
+            element.classList.add('active');
+            visitCount = element.innerText;
+        }
+
+        function selectSymptom(element) {
+            element.classList.toggle('active');
+            const symptom = element.innerText;
+            if (symptoms.includes(symptom)) {
+                symptoms = symptoms.filter(s => s !== symptom);
+            } else {
+                symptoms.push(symptom);
             }
-        },
-        components: {
-            Datepicker: VueDatePicker
-        },
-        methods: {
-            get () {
-                let url = new URL(window.location.href);
-                let params = url.searchParams;
-
-                let syoujou = params.get('name');
-                this.syoujou = syoujou;
-            },
-            done () {
-                var date1 = new Date(this.datepicker1);
-                var date2 = new Date(this.datepicker2);
-                var date3 = new Date(this.datepicker3);
-
-                var datetime1 = date1.getFullYear() + "年" + (date1.getMonth() + 1) + "月" + date1.getDate() + "日 " + this.datepicker1time;
-                var datetime2 = date2.getFullYear() + "年" + (date2.getMonth() + 1) + "月" + date2.getDate() + "日 " + this.datepicker2time;
-                var datetime3 = date3.getFullYear() + "年" + (date3.getMonth() + 1) + "月" + date3.getDate() + "日 " + this.datepicker3time;
-
-                var date = "";
-
-                if (this.datepicker1 !== "" && this.datepicker1time !== ""){
-                    date = date + "\n" +  datetime1 
-                }
-                if (this.datepicker2 !== "" && this.datepicker2time !== ""){
-                    date = date + "\n" +  datetime2
-                }
-                if (this.datepicker3 !== "" && this.datepicker3time !== ""){
-                    date = date + "\n" +  datetime3
-                }
-
-               liff.sendMessages([
-    {
-      type: "text",
-      text: "【予約フォーム】" + "\n" + "お名前：" + this.name + "\n" + "電話番号：" + this.tel + "\n" + "症状：" + this.syoujou + "\n" + "来院有無：" + this.number  + "\n" + "希望日時：" + date + "\n" + "メッセージ：" + this.message,
-    },
-  ])
-  .then(() => {
-    console.log("message sent");
-  })
-  .catch((err) => {
-    alert("error", err);
-  })
-  .finally(()=>{
-    liff.closeWindow();
-  });
-            },
-        },
-        mounted: async function(){
-            await liff.init({
-                liffId: ""
-            }).then(()=>{
-                if (liff.isLoggedIn()) {
-                    console.log("ログイン済");
-                } else {
-                    liff.login();
-                }
-            });
-        },
-        created() {
-            this.get();
-        },
-        computed: {
         }
-    }
-    Vue.createApp(app).mount('#bring')
-</script>
 
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const date1 = document.getElementById('date1').value;
+            const date2 = document.getElementById('date2').value;
+            const date3 = document.getElementById('date3').value;
+            const message = document.getElementById('message').value;
+
+            const formData = {
+                name,
+                phone,
+                visitCount,
+                symptoms,
+                dates: [date1, date2, date3],
+                message
+            };
+
+            if (!name || !phone || !date1 || !visitCount || symptoms.length === 0) {
+                alert('必須項目を全て入力してください。');
+                return;
+            }
+
+            const calendarId = 'b6d552a065b92516d4af5c10e1e2b70070da63d0e84dbb3111518a92fe067f5b@group.calendar.google.com';
+
+            const eventDetails = `
+                予約者名: ${name}
+                電話番号: ${phone}
+                訪問回数: ${visitCount}
+                症状: ${symptoms.join(', ')}
+                メッセージ: ${message}
+            `;
+
+            const dates = [date1, date2, date3].filter(date => date !== '');
+
+            dates.forEach(date => {
+                const eventUrl = generateGoogleCalendarUrl(calendarId, eventDetails, date);
+                window.open(eventUrl, '_blank');
+            });
+
+            alert('予約が送信されました。当日キャンセルはご遠慮ください。キャンセル料が発生します。');
+        }
+
+        function generateGoogleCalendarUrl(calendarId, details, dateTime) {
+            const startDateTime = new Date(dateTime);
+            const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000); // 30分後を終了時間とする
+            const start = startDateTime.toISOString().replace(/-|:|\.\d{3}/g, "");
+            const end = endDateTime.toISOString().replace(/-|:|\.\d{3}/g, "");
+
+            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=予約&details=${encodeURIComponent(details)}&dates=${start}/${end}&sf=true&output=xml&src=${calendarId}`;
+            return url;
+        }
+    </script>
 </body>
 </html>
-"# testfoam" 
-"# testfoam" 
-"# testfoam" 
