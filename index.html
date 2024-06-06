@@ -5,7 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>予約フォーム</title>
     <style>
-        /* スタイルは省略（元のHTMLからコピーしてください） */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="tel"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .visit-buttons, .symptoms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .visit-buttons button, .symptoms button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f7f7f7;
+            cursor: pointer;
+            box-sizing: border-box;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .visit-buttons button.active, .symptoms button.active {
+            background-color: #444;
+            color: #fff;
+        }
+        .date-inputs input[type="datetime-local"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff4c4c;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -75,9 +150,9 @@
         function submitForm() {
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
-            const date1 = document.getElementById('date1').value;
-            const date2 = document.getElementById('date2').value;
-            const date3 = document.getElementById('date3').value;
+            const date1 = formatDate(document.getElementById('date1').value);
+            const date2 = formatDate(document.getElementById('date2').value);
+            const date3 = formatDate(document.getElementById('date3').value);
             const message = document.getElementById('message').value;
 
             const formData = {
@@ -89,25 +164,31 @@
                 message
             };
 
-            fetch('https://script.google.com/macros/s/AKfycbylYAXQXTvFXTaodqiYNpMJeeoOKQ0qeubJjT7CyPxp9GBefg2repq3YO_vuhvdZE2z/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbwT15s1Ri8Zig9hxVQK5NwMLcem0qhi1Gf4o-dMygDsBvxfil-w1L-hQem4JUsgEOM/exec', {
                 method: 'POST',
-                body: JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify(formData)
             })
             .then(response => response.json())
             .then(data => {
-                if (data.result === 'success') {
-                    alert('予約が成功しました');
+                if (data.status === 'success') {
+                    alert('予約が正常に送信されました。');
                 } else {
-                    alert('予約に失敗しました。もう一度お試しください。');
+                    alert('予約の送信に失敗しました。');
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('予約に失敗しました。もう一度お試しください。');
+                console.error('エラー:', error);
+                alert('予約の送信に失敗しました。');
             });
+        }
+
+        function formatDate(datetime) {
+            if (!datetime) return '';
+            const date = new Date(datetime);
+            return date.toISOString();
         }
     </script>
 </body>
