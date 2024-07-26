@@ -1,133 +1,196 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja"> <!-- HTML文書の言語を日本語に設定 -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>予約フォーム</title>
+    <meta charset="UTF-8"> <!-- 文字エンコーディングをUTF-8に設定 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ビューポート設定：デバイスに応じてレイアウトを調整 -->
+    <title>予約フォーム</title> <!-- タイトルを「予約フォーム」に設定 -->
     <style>
         body {
+            /* フォントをArialまたはsans-serifに設定 */
             font-family: Arial, sans-serif;
+            /* 背景色を淡いグレーに設定 */
             background-color: #f7f7f7;
+            /* フレックスボックスで子要素を配置 */
             display: flex;
+            /* 水平方向に中央寄せ */
             justify-content: center;
+            /* 垂直方向に上寄せ */
             align-items: flex-start;
+            /* ビューポートの高さを100%に設定 */
             height: 100vh;
+            /* ページ全体のマージンを0に設定 */
             margin: 0;
-            padding-top: 20px; /* ページのトップに空白を作る */
+            /* ページのトップに空白を作る */
+            padding-top: 20px;
         }
         .container {
+            /* 背景色を白に設定 */
             background-color: #fff;
+            /* 角を丸める */
             border-radius: 8px;
+            /* ボックスシャドウを設定 */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* 幅を90%に設定 */
             width: 90%;
+            /* 最大幅を500pxに設定 */
             max-width: 500px;
+            /* 内側の余白を設定 */
             padding: 20px;
+            /* ボックスのサイズを境界線を含むように設定 */
             box-sizing: border-box;
         }
         h1 {
+            /* テキストを中央揃え */
             text-align: center;
+            /* 下部のマージンを設定 */
             margin-bottom: 20px;
+            /* フォントサイズを24pxに設定 */
             font-size: 24px;
         }
         label {
+            /* ブロック要素として表示 */
             display: block;
+            /* 下部のマージンを設定 */
             margin-bottom: 10px;
+            /* フォントを太字に設定 */
             font-weight: bold;
         }
         input[type="text"], input[type="tel"], textarea {
+            /* 幅を100%に設定 */
             width: 100%;
+            /* 内側の余白を設定 */
             padding: 10px;
+            /* 下部のマージンを設定 */
             margin-bottom: 20px;
+            /* 境界線のスタイルを設定 */
             border: 1px solid #ccc;
+            /* 角を丸める */
             border-radius: 4px;
+            /* ボックスのサイズを境界線を含むように設定 */
             box-sizing: border-box;
         }
         .visit-buttons, .symptoms {
+            /* フレックスボックスで子要素を配置 */
             display: flex;
+            /* 子要素を折り返し */
             flex-wrap: wrap;
+            /* 要素間の隙間を設定 */
             gap: 10px;
+            /* 下部のマージンを設定 */
             margin-bottom: 20px;
         }
         .visit-buttons button, .symptoms button {
+            /* フレックスアイテムを均等に配置 */
             flex: 1;
+            /* 内側の余白を設定 */
             padding: 10px;
+            /* 境界線のスタイルを設定 */
             border: 1px solid #ccc;
+            /* 角を丸める */
             border-radius: 4px;
+            /* 背景色を設定 */
             background-color: #f7f7f7;
+            /* カーソルをポインタに変更 */
             cursor: pointer;
+            /* ボックスのサイズを境界線を含むように設定 */
             box-sizing: border-box;
+            /* テキストを中央揃え */
             text-align: center;
+            /* テキストを折り返さずに表示 */
             white-space: nowrap;
         }
         .visit-buttons button.active, .symptoms button.active {
+            /* アクティブ状態のボタンの背景色を設定 */
             background-color: #444;
+            /* アクティブ状態のボタンのテキスト色を設定 */
             color: #fff;
         }
         .date-inputs input[type="datetime-local"] {
+            /* 幅を計算して設定 */
             width: calc(100% - 22px);
+            /* 内側の余白を設定 */
             padding: 10px;
+            /* 下部のマージンを設定 */
             margin-bottom: 20px;
+            /* 境界線のスタイルを設定 */
             border: 1px solid #ccc;
+            /* 角を丸める */
             border-radius: 4px;
+            /* ボックスのサイズを境界線を含むように設定 */
             box-sizing: border-box;
         }
         .submit-button {
+            /* 幅を100%に設定 */
             width: 100%;
+            /* 内側の余白を設定 */
             padding: 15px;
+            /* 境界線を削除 */
             border: none;
+            /* 角を丸める */
             border-radius: 4px;
+            /* 背景色を設定 */
             background-color: #ff4c4c;
+            /* テキスト色を設定 */
             color: #fff;
+            /* フォントサイズを18pxに設定 */
             font-size: 18px;
+            /* カーソルをポインタに変更 */
             cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>予約フォーム</h1>
-        <label for="name">お客様名※必須</label>
-        <input type="text" id="name" placeholder="お名前を入力してください">
+        <h1>予約フォーム</h1> <!-- フォームの見出し -->
+        <label for="name">お客様名※必須</label> <!-- 名前入力フィールドのラベル -->
+        <input type="text" id="name" placeholder="お名前を入力してください"> <!-- 名前入力フィールド -->
 
-        <label for="phone">電話番号※必須</label>
-        <input type="tel" id="phone" placeholder="電話番号を入力してください">
+        <label for="phone">電話番号※必須</label> <!-- 電話番号入力フィールドのラベル -->
+        <input type="tel" id="phone" placeholder="電話番号を入力してください"> <!-- 電話番号入力フィールド -->
 
-        <label>ご来店回数※必須</label>
+        <label>ご来店回数※必須</label> <!-- ご来店回数のラベル -->
         <div class="visit-buttons">
-            <button type="button" id="firstVisit" onclick="selectVisit(this)">初めて</button>
-            <button type="button" id="repeatVisit" onclick="selectVisit(this)">2回目以降</button>
+            <button type="button" id="firstVisit" onclick="selectVisit(this)">初めて</button> <!-- 初めて来店ボタン -->
+            <button type="button" id="repeatVisit" onclick="selectVisit(this)">2回目以降</button> <!-- 2回目以降来店ボタン -->
         </div>
 
-        <label>コース※必須とんトン！</label>
+        <label>症状※必須</label> <!-- 症状のラベル -->
         <div class="symptoms">
-            <button type="button" onclick="selectSymptom(this)">整体・ボディケア60分</button>
-            <button type="button" onclick="selectSymptom(this)">整体ボディケア＋セルフ整体エクササイズ</button>
+            <button type="button" onclick="selectSymptom(this)">頭痛・偏頭痛</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">交通事故施術</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">肩こり・腕のしびれ</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">臀部・下肢の痛みや痒れ</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">ぎっくり腰・慢性腰痛</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">寝違い・むち打ち等首の症状</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">EMS(電気的筋肉刺激装置)トレーニング</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">健康保険の施術</button> <!-- 症状ボタン -->
+            <button type="button" onclick="selectSymptom(this)">その他</button> <!-- 症状ボタン -->
         </div>
 
-        <label for="date1">第1希望日※必須</label>
-        <input type="datetime-local" id="date1" placeholder="タップして日時を入力">
+        <label for="date1">第1希望日※必須<br>希望時間は30分単位でお願いします</label> <!-- 第1希望日時のラベル -->
+        <input type="datetime-local" id="date1" placeholder="タップして日時を入力"> <!-- 第1希望日時入力フィールド -->
 
-        <label for="date2">第2希望日</label>
-        <input type="datetime-local" id="date2" placeholder="タップして日時を入力">
+        <label for="date2">第2希望日</label> <!-- 第2希望日時のラベル -->
+        <input type="datetime-local" id="date2" placeholder="タップして日時を入力"> <!-- 第2希望日時入力フィールド -->
 
-        <label for="date3">第3希望日</label>
-        <input type="datetime-local" id="date3" placeholder="タップして日時を入力">
+        <label for="date3">第3希望日</label> <!-- 第3希望日時のラベル -->
+        <input type="datetime-local" id="date3" placeholder="タップして日時を入力"> <!-- 第3希望日時入力フィールド -->
 
-        <label for="message">メッセージ（質問等お気軽にご記入ください）</label>
-        <textarea id="message" rows="4" placeholder="メッセージを入力してください"></textarea>
+        <label for="message">メッセージ（質問等お気軽にご記入ください）</label> <!-- メッセージ入力フィールドのラベル -->
+        <textarea id="message" rows="4" placeholder="メッセージを入力してください"></textarea> <!-- メッセージ入力フィールド -->
 
-        <button class="submit-button" onclick="submitForm()">予約を行う</button>
+        <button class="submit-button" onclick="submitForm()">予約を行う</button> <!-- フォーム送信ボタン -->
     </div>
 
-    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script> <!-- LIFF SDKの読み込み -->
     <script>
-        let visitCount = '';
-        let selectedSymptom = '';
+        let visitCount = ''; <!-- 訪問回数を格納する変数 -->
+        let selectedSymptom = ''; <!-- 選択された症状を格納する変数 -->
 
         // LIFF初期化
         document.addEventListener('DOMContentLoaded', function() {
             liff.init({
-                liffId: '2005254357-zKma9BZk' // ここにあなたのLIFF IDを入力
+                liffId: '' // ここにあなたのLIFF IDを入力
             }).then(() => {
                 // LIFF初期化成功時の処理
                 console.log('LIFF初期化成功');
@@ -138,22 +201,29 @@
         });
 
         function selectVisit(element) {
+            /* 訪問回数ボタンの選択状態をリセット */
             document.getElementById('firstVisit').classList.remove('active');
             document.getElementById('repeatVisit').classList.remove('active');
+            /* クリックされたボタンを選択状態にする */
             element.classList.add('active');
+            /* 選択された訪問回数を変数に格納 */
             visitCount = element.innerText;
         }
 
         function selectSymptom(element) {
+            /* 全ての症状ボタンの選択状態をリセット */
             const allSymptoms = document.querySelectorAll('.symptoms button');
             allSymptoms.forEach(symptom => {
                 symptom.classList.remove('active');
             });
+            /* クリックされたボタンを選択状態にする */
             element.classList.add('active');
+            /* 選択された症状を変数に格納 */
             selectedSymptom = element.innerText;
         }
 
         function submitForm() {
+            /* フォームの入力値を取得 */
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const date1 = formatDate(document.getElementById('date1').value);
@@ -161,6 +231,7 @@
             const date3 = formatDate(document.getElementById('date3').value);
             const message = document.getElementById('message').value;
 
+            /* フォームデータをオブジェクトにまとめる */
             const formData = {
                 name,
                 phone,
@@ -173,20 +244,24 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n訪問回数：${formData.visitCount}\nコース：${formData.selectedSymptom}\n希望日時：\n ${formData.dates[0]}\n${formData.dates[1]}\n${formData.dates[2]}\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n訪問回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom}\n希望日時：\n ${formData.dates[0]}\n${formData.dates[1]}\n${formData.dates[2]}\nメッセージ：${formData.message}`
             }]).then(() => {
-                alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。 ' );
-                // LIFFウィンドウを閉じる
+                /* メッセージ送信成功時の処理 */
+                alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
+                /* LIFFウィンドウを閉じる */
                 liff.closeWindow();
             }).catch((err) => {
-                // 失敗時の処理（エラーメッセージを表示しない）
+                /* メッセージ送信失敗時の処理 */
                 console.error('メッセージの送信に失敗しました', err);
             });
         }
 
         function formatDate(datetime) {
+            /* 日時文字列が空の場合は空文字を返す */
             if (!datetime) return '';
+            /* 日時文字列をDateオブジェクトに変換 */
             const date = new Date(datetime);
+            /* 年、月、日、時、分を取得しフォーマット */
             const year = date.getFullYear();
             const month = ('0' + (date.getMonth() + 1)).slice(-2);
             const day = ('0' + date.getDate()).slice(-2);
