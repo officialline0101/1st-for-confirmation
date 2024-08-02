@@ -91,7 +91,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>予約フォーム</h1> <!-- フォームの見出し -->
+        <h1>予約フォーム1</h1> <!-- フォームの見出し -->
         <label for="name">お客様名</label> <!-- 名前入力フィールドのラベル -->
         <input type="text" id="name" placeholder="お名前を入力してください"> <!-- 名前入力フィールド -->
 
@@ -241,14 +241,6 @@
             /* フォームの入力値を取得 */
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
-            const phone = document.getElementById('visitCount').value;
-
-            /* 入力チェック */
-            if (!name || !phone || !visitCount) {
-                alert('入力不足です');
-                return;
-            }
-            
             const date1 = formatDate(document.getElementById('date1').value);
             const date2 = formatDate(document.getElementById('date2').value);
             const date3 = formatDate(document.getElementById('date3').value);
@@ -265,20 +257,24 @@
                 message
             };
 
-            // LINEトークにメッセージを送信
-            liff.sendMessages([{
-                type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom}${formData.visitCount}${formData.irradiationsCount}\n希望日時：\n ${formData.dates[0]}\n${formData.dates[1]}\n${formData.dates[2]}\nメッセージ：${formData.message}`
-            }]).then(() => {
-                /* メッセージ送信成功時の処理 */
-                alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
-                /* LIFFウィンドウを閉じる */
-                liff.closeWindow();
-            }).catch((err) => {
-                /* メッセージ送信失敗時の処理 */
-                console.error('メッセージの送信に失敗しました', err);
-            });
-        }
+// LINEトークにメッセージを送信
+if (!formData.name || !formData.phone || !formData.visitCount) {
+    alert('入力不足です');
+} else {
+    liff.sendMessages([{
+        type: 'text',
+        text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom}${formData.visitCount}${formData.irradiationsCount}\n希望日時：\n ${formData.dates[0]}\n${formData.dates[1]}\n${formData.dates[2]}\nメッセージ：${formData.message}`
+    }]).then(() => {
+        /* メッセージ送信成功時の処理 */
+        alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
+        /* LIFFウィンドウを閉じる */
+        liff.closeWindow();
+    }).catch((err) => {
+        /* メッセージ送信失敗時の処理 */
+        console.error('メッセージの送信に失敗しました', err);
+    });
+}
+
 
         function formatDate(datetime) {
             /* 日時文字列が空の場合は空文字を返す */
