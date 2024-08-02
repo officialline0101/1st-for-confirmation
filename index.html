@@ -91,7 +91,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>予約フォーム2</h1> <!-- フォームの見出し -->
+        <h1>予約フォーム</h1> <!-- フォームの見出し -->
         <label for="name">お客様名</label> <!-- 名前入力フィールドのラベル -->
         <input type="text" id="name" placeholder="お名前を入力してください"> <!-- 名前入力フィールド -->
 
@@ -241,6 +241,14 @@
             /* フォームの入力値を取得 */
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
+            const phone = document.getElementById('visitCount').value;
+
+            /* 入力チェック */
+            if (!name || !phone || !visitCount) {
+                alert('入力不足です');
+                return;
+            }
+            
             const date1 = formatDate(document.getElementById('date1').value);
             const date2 = formatDate(document.getElementById('date2').value);
             const date3 = formatDate(document.getElementById('date3').value);
