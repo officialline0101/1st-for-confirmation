@@ -187,7 +187,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>リラクゼーション月日星<br>予約フォーム</h1>
+        <h1>リラクゼーション月日星<br>予約フォーム2</h1>
         <div class="label">お客様名</div>
         <input type="text" id="name" placeholder="お名前を入力してください">
 
@@ -291,18 +291,6 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             selectedSymptom = button.textContent;
-
-    const repairLabel = document.getElementById('repairLabel');
-    const repairButtons = document.getElementById('repairButtons');
-
-    if (selectedSymptom === 'お直しネイル' || selectedSymptom === '長さ出し') {
-        repairLabel.style.display = 'block';
-        repairButtons.style.display = 'flex';
-    } else {
-        repairLabel.style.display = 'none';
-        repairButtons.style.display = 'none';
-    }
-}
 
         function toggleOtherSymptom(element) {
             element.classList.toggle('active'); // ボタンの状態を切り替える
