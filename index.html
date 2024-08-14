@@ -187,7 +187,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>princess<br>予約フォーム12</h1>
+        <h1>princess<br>予約フォーム</h1>
         <div class="label">お客様名</div>
         <input type="text" id="name" placeholder="お名前を入力してください">
 
@@ -394,7 +394,7 @@ async function fetchAvailability(date) {
         return;
     }
 
-    const url = 'https://script.google.com/macros/s/AKfycbyVpOPJeMa5G-AXWCcqooULWyo17yxCvID8kI4JAEVkiaZgbddQOHiWejnW_hqxjwXlbw/exec' + 
+    const url = 'https://script.google.com/macros/s/AKfycbzKwUOlgp88CqE6GW0-DFAqOuVzxqVya6AK3iTM__gbchPH6B_sRJOyUXT69PyDXemj/exec' + 
                 `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
 
     try {
