@@ -187,7 +187,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>princess<br>予約フォーム</h1>
+        <h1>princess<br>予約フォーム12</h1>
         <div class="label">お客様名</div>
         <input type="text" id="name" placeholder="お名前を入力してください">
 
@@ -278,31 +278,21 @@
             fetchAvailability(currentDate);
         });
 
-        function selectVisit(button) {
-            const buttons = document.querySelectorAll('.visit-buttons button');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            visitCount = button.id === 'firstVisit' ? 'オフあり' : 'オフなし';
+        function selectVisit(element) {
+            document.getElementById('firstVisit').classList.remove('active');
+            document.getElementById('repeatVisit').classList.remove('active');
+            element.classList.add('active');
+            visitCount = element.innerText;
         }
 
-
-        function selectSymptom(button) {
-            const buttons = document.querySelectorAll('.symptoms button');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            selectedSymptom = button.textContent;
-
-    const repairLabel = document.getElementById('repairLabel');
-    const repairButtons = document.getElementById('repairButtons');
-
-    if (selectedSymptom === 'お直しネイル' || selectedSymptom === '長さ出し') {
-        repairLabel.style.display = 'block';
-        repairButtons.style.display = 'flex';
-    } else {
-        repairLabel.style.display = 'none';
-        repairButtons.style.display = 'none';
-    }
-}
+        function selectSymptom(element) {
+            const allSymptoms = document.querySelectorAll('.symptoms button');
+            allSymptoms.forEach(symptom => {
+                symptom.classList.remove('active');
+            });
+            element.classList.add('active');
+            selectedSymptom = element.innerText;
+        }
 
         function toggleOtherSymptom(element) {
             element.classList.toggle('active'); // ボタンの状態を切り替える
