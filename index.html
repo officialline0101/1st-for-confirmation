@@ -187,7 +187,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>リラクゼーション月日星<br>予約フォーム</h1>
+        <h1>princess<br>予約フォーム</h1>
         <div class="label">お客様名</div>
         <input type="text" id="name" placeholder="お名前を入力してください">
 
@@ -268,7 +268,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             liff.init({
-                liffId: '2005254357-zKma9BZk'
+                liffId: ''
             }).then(() => {
                 console.log('LIFF初期化成功');
             }).catch((err) => {
@@ -291,6 +291,18 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             selectedSymptom = button.textContent;
+
+    const repairLabel = document.getElementById('repairLabel');
+    const repairButtons = document.getElementById('repairButtons');
+
+    if (selectedSymptom === 'お直しネイル' || selectedSymptom === '長さ出し') {
+        repairLabel.style.display = 'block';
+        repairButtons.style.display = 'flex';
+    } else {
+        repairLabel.style.display = 'none';
+        repairButtons.style.display = 'none';
+    }
+}
 
         function toggleOtherSymptom(element) {
             element.classList.toggle('active'); // ボタンの状態を切り替える
@@ -335,8 +347,8 @@ function selectDate(cell) {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
                 visitCount: visitCount,
-                Symptom: selectedSymptom,
-                selectedOtherSymptoms: selectedOtherSymptoms,
+                selectedSymptom: selectedSymptom,
+                otherSymptoms: selectedOtherSymptoms, // その他の症状
                 dates: [selectedFullDate],
                 message: document.getElementById('message').value
             };
@@ -350,7 +362,7 @@ if (!formData.name || !formData.phone) {
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n訪問回数：${formData.visitCount}\nコース：${formData.symptoms}\n症状：${formData.otherSymptoms.join(', ')}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n訪問回数：${formData.visitCount}\nコース：${formData.symptoms}\n症状：${formData.otherSymptoms.join(', ')}\n希望日時：\n ${formData.dates[0]}\n${formData.dates[1]}\n${formData.dates[2]}\nメッセージ：${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
