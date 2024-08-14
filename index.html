@@ -187,7 +187,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>princess<br>予約フォーム</h1>
+        <h1>princess<br>予約フォーム12</h1>
         <div class="label">お客様名</div>
         <input type="text" id="name" placeholder="お名前を入力してください">
 
@@ -362,7 +362,7 @@ if (!formData.name || !formData.phone) {
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n訪問回数：${formData.visitCount}\nコース：${formData.symptoms}\n症状：${formData.otherSymptoms.join(', ')}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n訪問回数：${formData.visitCount}\nコース：${formData.selectedSymptom}\n症状：${formData.otherSymptoms.join(', ')}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
